@@ -101,7 +101,7 @@ public class CashMachine {
 			pieces = amount / value;
 			// Check that all pieces are available.
 			// Take what IS available.
-			if(pieces > available &&){
+			if ( pieces > available && available != 0 ) {
 				pieces = pieces - available;
 				amount = amount - (amount * pieces);
 			}
