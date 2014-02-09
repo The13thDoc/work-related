@@ -47,8 +47,8 @@ public class Driver {
 		BufferedReader commandLine;
 		boolean continueLoop = true;
 
-		System.out
-				.println("Welcome to SafeNet ATM.\nPlease enter a command...\n");
+		System.out.println("Welcome to ATM.\nPlease enter a command...\n");
+		
 		while (continueLoop) {
 			try {
 				commandLine = new BufferedReader(new InputStreamReader(

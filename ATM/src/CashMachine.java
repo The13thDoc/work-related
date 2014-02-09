@@ -81,19 +81,14 @@ public class CashMachine {
 	 * @param index
 	 *            - Index corresponding to the current denomination.
 	 */
-	public void withdraw(Integer[] values, int amount, int index) {
+	public void withdraw(Integer[] values, int amount, int index,
+			Integer[] trackedPieces) {
 		CashMachineSystem cash = (CashMachineSystem) cashSystem;
 		int value = values[index];
-		// System.out.println("Amount: " + amount);
 
 		if (amount < value) {
-			// System.out.println("Amount is less than " + value);
 			withdraw(values, amount, index + 1);
 		} else {
-			if (cash.getQuantityOfValue(index) == 0) {
-				
-			}
-			// System.out.println("Amount is >= to " + value);
 			int pieces = 0;
 			int remaining = 0;
 			int available = cash.getQuantityOfValue(index);
@@ -101,7 +96,7 @@ public class CashMachine {
 			pieces = amount / value;
 			// Check that all pieces are available.
 			// Take what IS available.
-			if ( pieces > available && available != 0 ) {
+			if (pieces >= available && available != 0) {
 				pieces = pieces - available;
 				amount = amount - (amount * pieces);
 			}
