@@ -66,8 +66,8 @@ public class CashMachine {
 	 *         <strong>false</strong> if the funds are not available.
 	 */
 	public boolean withdraw(Integer amount) {
-		Integer[] occurrences = new Integer[cashSystem.getValuesArray().length];
-		this.withdraw(cashSystem.getValuesArray(), amount, 0);
+		Integer[] trackedPieces = new Integer[cashSystem.getValuesArray().length];
+		this.withdraw(cashSystem.getValuesArray(), amount, 0, trackedPieces);
 		return false;
 	}
 
@@ -87,7 +87,7 @@ public class CashMachine {
 		int value = values[index];
 
 		if (amount < value) {
-			withdraw(values, amount, index + 1);
+			withdraw(values, amount, index + 1, trackedPieces);
 		} else {
 			int pieces = 0;
 			int remaining = 0;
@@ -100,11 +100,12 @@ public class CashMachine {
 				pieces = pieces - available;
 				amount = amount - (amount * pieces);
 			}
+			trackedPieces[index] = pieces;
 			remaining = amount % value;
 			System.out.println(value + " - " + pieces);
 
 			if (remaining > 0) {
-				withdraw(values, remaining, index + 1);
+				withdraw(values, remaining, index + 1, trackedPieces);
 			}
 		}
 	}
