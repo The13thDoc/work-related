@@ -66,8 +66,18 @@ public class CashMachine {
 	 *         <strong>false</strong> if the funds are not available.
 	 */
 	public boolean withdraw(Integer amount) {
+		CashMachineSystem cash = (CashMachineSystem) cashSystem;
 		Integer[] trackedPieces = new Integer[cashSystem.getValuesArray().length];
-		this.withdraw(cashSystem.getValuesArray(), amount, 0, trackedPieces);
+		boolean isSuccessful = withdraw(cashSystem.getValuesArray(), amount, 0,
+				trackedPieces);
+
+		if (isSuccessful) {
+			for (int index = 0; index < trackedPieces.length; index++) {
+//				System.out.println("Index: " + index + "\nRemaining: "
+//						+ trackedPieces[index]);
+				cash.setQuantity(index, trackedPieces[index]);
+			}
+		}
 		return false;
 	}
 
@@ -81,31 +91,41 @@ public class CashMachine {
 	 * @param index
 	 *            - Index corresponding to the current denomination.
 	 */
-	public void withdraw(Integer[] values, int amount, int index,
+	public boolean withdraw(Integer[] values, int amount, int index,
 			Integer[] trackedPieces) {
 		CashMachineSystem cash = (CashMachineSystem) cashSystem;
 		int value = values[index];
 
 		if (amount < value) {
-			withdraw(values, amount, index + 1, trackedPieces);
+			return withdraw(values, amount, index + 1, trackedPieces);
 		} else {
 			int pieces = 0;
 			int remaining = 0;
 			int available = cash.getQuantityOfValue(index);
-			
+
 			pieces = amount / value;
 			// Check that all pieces are available.
 			// Take what IS available.
 			if (pieces >= available && available != 0) {
 				pieces = pieces - available;
 				amount = amount - (amount * pieces);
+				trackedPieces[index] = pieces;
+				System.out.println("Pieces: " + pieces);
+				System.out.println("Tracked: " + trackedPieces[index]);
+				remaining = amount % value;
+				System.out.println(value + " - " + pieces);
+			} else {
+				if (index == (cashSystem.getValuesArray().length - 1)) {
+					System.out.println("No denominations available to complete"
+							+ " the withdrawl.");
+					return false;
+				}
 			}
-			trackedPieces[index] = pieces;
-			remaining = amount % value;
-			System.out.println(value + " - " + pieces);
 
 			if (remaining > 0) {
-				withdraw(values, remaining, index + 1, trackedPieces);
+				return withdraw(values, remaining, index + 1, trackedPieces);
+			} else {
+				return true;
 			}
 		}
 	}
