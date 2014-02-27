@@ -50,6 +50,15 @@ public class CashMachineSystem implements ValueSystem {
 		quantities.set(index, quantity);
 	}
 
+	/**
+	 * Gets the quantities.
+	 * @return Integer[]
+	 */
+	public Integer[] getQuantitiesArray() {
+		Integer[] quantitiesArray = {};
+		return quantities.toArray(quantitiesArray);
+	}
+
 	@Override
 	public ArrayList<Integer> getValuesList() {
 		return values;

@@ -5,30 +5,8 @@
  */
 public class CashMachine {
 	/**
-	 * Represents the quantity of one hundred (100) dollar bills available.
+	 * Instance of ValueSystem.
 	 */
-	private Integer oneHundred;
-	/**
-	 * Represents the quantity of fifty (50) bills available.
-	 */
-	private Integer fifty;
-	/**
-	 * Represents the quantity of twenty (20) dollar bills available.
-	 */
-	private Integer twenty;
-	/**
-	 * Represents the quantity of ten (10) dollar bills available.
-	 */
-	private Integer ten;
-	/**
-	 * Represents the quantity of five (5) dollar bills available.
-	 */
-	private Integer five;
-	/**
-	 * Represents the quantity of one (1) dollar bills available.
-	 */
-	private Integer one;
-
 	private ValueSystem cashSystem;
 	/**
 	 * Single, unique instance of the cash machine.
@@ -48,13 +26,6 @@ public class CashMachine {
 	 * Restock the cash machine with the predetermined quantity of bills.
 	 */
 	public void restock() {
-		this.oneHundred = 10;
-		this.fifty = 10;
-		this.twenty = 10;
-		this.ten = 10;
-		this.five = 10;
-		this.one = 10;
-
 		cashSystem.setQuantities();
 	}
 
@@ -67,14 +38,12 @@ public class CashMachine {
 	 */
 	public boolean withdraw(Integer amount) {
 		CashMachineSystem cash = (CashMachineSystem) cashSystem;
-		Integer[] trackedPieces = new Integer[cashSystem.getValuesArray().length];
+		Integer[] trackedPieces = cash.getQuantitiesArray();
 		boolean isSuccessful = withdraw(cashSystem.getValuesArray(), amount, 0,
 				trackedPieces);
 
 		if (isSuccessful) {
 			for (int index = 0; index < trackedPieces.length; index++) {
-//				System.out.println("Index: " + index + "\nRemaining: "
-//						+ trackedPieces[index]);
 				cash.setQuantity(index, trackedPieces[index]);
 			}
 		}
@@ -84,36 +53,32 @@ public class CashMachine {
 	/**
 	 * Reduce the specified amount according to the denominations available.
 	 * 
-	 * @param values
+	 * @param denom
 	 *            - Array of value denominations.
 	 * @param amount
 	 *            - Amount of currency to be processed.
 	 * @param index
 	 *            - Index corresponding to the current denomination.
 	 */
-	public boolean withdraw(Integer[] values, int amount, int index,
+	public boolean withdraw(Integer[] denom, int amount, int index,
 			Integer[] trackedPieces) {
 		CashMachineSystem cash = (CashMachineSystem) cashSystem;
-		int value = values[index];
+		int currentDenom = denom[index];
 
-		if (amount < value) {
-			return withdraw(values, amount, index + 1, trackedPieces);
+		if (amount < currentDenom) {
+			return withdraw(denom, amount, index + 1, trackedPieces);
 		} else {
 			int pieces = 0;
-			int remaining = 0;
 			int available = cash.getQuantityOfValue(index);
 
-			pieces = amount / value;
+			pieces = amount / currentDenom;
+
 			// Check that all pieces are available.
 			// Take what IS available.
-			if (pieces >= available && available != 0) {
-				pieces = pieces - available;
-				amount = amount - (amount * pieces);
-				trackedPieces[index] = pieces;
-				System.out.println("Pieces: " + pieces);
-				System.out.println("Tracked: " + trackedPieces[index]);
-				remaining = amount % value;
-				System.out.println(value + " - " + pieces);
+			if (pieces <= available && available != 0) {
+				available = available - pieces;
+				amount = amount - (currentDenom * pieces);
+				trackedPieces[index] = available;
 			} else {
 				if (index == (cashSystem.getValuesArray().length - 1)) {
 					System.out.println("No denominations available to complete"
@@ -122,8 +87,8 @@ public class CashMachine {
 				}
 			}
 
-			if (remaining > 0) {
-				return withdraw(values, remaining, index + 1, trackedPieces);
+			if (amount > 0) {
+				return withdraw(denom, amount, index + 1, trackedPieces);
 			} else {
 				return true;
 			}

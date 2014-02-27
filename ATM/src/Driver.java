@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Scanner;
 
 /**
  * ATM 2014
@@ -26,7 +25,7 @@ public class Driver {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		Driver ATMApp = new Driver();
+		new Driver();
 	}
 
 	/**
@@ -69,27 +68,27 @@ public class Driver {
 	 */
 	private boolean checkInput(String input) {
 		try {
-			input.toLowerCase();
-			input = input.replaceFirst("$", "");
+			input = input.toLowerCase();
+			input = input.replace("$", "");
+			input = input.trim();
+			
+			// Get the command, then strip it from the other data
+			String command = input.substring(0,1);
+			input = input.replaceFirst(command, "");
 			input = input.trim();
 
-			if (input.equals("r")) { // Restock
+			if (command.equals("r")) { // Restock
 				restock();
 			}
-			if (input.equals("q")) { // Quit
+			if (command.equals("q")) { // Quit
 				return false;
 			}
-			if (input.contains("w")) { // Withdraw
-				input = input.replaceFirst("w", "");
-				input = input.trim();
-
+			if (command.equals("w")) { // Withdraw
 				withdraw(Integer.parseInt(input));
 				status();
 			}
-			if (input.contains("i")) { // Display denomination(s)
-				input = input.replaceFirst("i", "");
-				input = input.trim();
-				String[] denomsString = input.split(" ");
+			if (command.equals("i")) { // Display denomination(s)
+				String[] denomsString = input.split("\\s+");
 				Integer[] denomsInt = new Integer[denomsString.length];
 
 				for (int i = 0; i < denomsString.length; i++) {
