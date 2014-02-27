@@ -43,6 +43,7 @@ public class CashMachine {
 				trackedPieces);
 
 		if (isSuccessful) {
+			System.out.println("Success: Dispensed $" + amount);
 			for (int index = 0; index < trackedPieces.length; index++) {
 				cash.setQuantity(index, trackedPieces[index]);
 			}
@@ -81,8 +82,7 @@ public class CashMachine {
 				trackedPieces[index] = available;
 			} else {
 				if (index == (cashSystem.getValuesArray().length - 1)) {
-					System.out.println("No denominations available to complete"
-							+ " the withdrawl.");
+					System.out.println("Failure: insufficient funds");
 					return false;
 				}
 			}

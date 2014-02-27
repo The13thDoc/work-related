@@ -85,6 +85,7 @@ public class Driver {
 			}
 			if (command.equals("w")) { // Withdraw
 				withdraw(Integer.parseInt(input));
+				System.out.println("Machine balance:");
 				status();
 			}
 			if (command.equals("i")) { // Display denomination(s)
@@ -97,9 +98,9 @@ public class Driver {
 				}
 			}
 		} catch (NumberFormatException e) {
-			System.out.println("Invalid Command");
+			System.out.println("Failure: Invalid Command");
 		} catch (Exception e) {
-			System.out.println("Invalid Command");
+			System.out.println("Failure: Invalid Command");
 		}
 		return true;
 	}
