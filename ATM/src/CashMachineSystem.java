@@ -46,6 +46,11 @@ public class CashMachineSystem implements ValueSystem {
 		}
 	}
 
+	/**
+	 * Set the quantity of the specified value.
+	 * @param index
+	 * @param quantity
+	 */
 	public void setQuantity(Integer index, Integer quantity) {
 		quantities.set(index, quantity);
 	}
@@ -70,6 +75,11 @@ public class CashMachineSystem implements ValueSystem {
 		return values.toArray(valuesArray);
 	}
 
+	/**
+	 * Gets the quantity of the specified value.
+	 * @param index
+	 * @return
+	 */
 	public Integer getQuantityOfValue(Integer index) {
 		return quantities.get(index);
 	}
